@@ -3,5 +3,11 @@
  * @returns {string}
  */
 function camelize(str) {
-  // ваш код...
+  return str ?
+  	 str.split('-').map((word, index) => {
+       if(index){
+        return word[0].toUpperCase() + word.slice(1);
+       } 
+       return word;
+     }).join('') : str;
 }
