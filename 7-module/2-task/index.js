@@ -1,47 +1,50 @@
 import createElement from '../../assets/lib/create-element.js';
 
 export default class Modal {
-  title;
-  body;
+  modal;
 
   constructor() {
+    this.createModal();
   }
 
   setTitle(title){
-   this.title = title;
+    const modalTitle = this.modal.querySelector('.modal__title');
+    if(modalTitle){
+      modalTitle.innerText = title;
+    }
   }
 
   setBody(node){
-    this.body = node;
+    const modalBody = this.modal.querySelector('.modal__body');
+    if(modalBody){
+      modalBody.appendChild(node);
+    }
+  }
+
+  createModal(){
+    const html = `
+    <div class="modal">
+      <div class="modal__overlay"></div>
+      <div class="modal__inner">
+        <div class="modal__header">
+          <button type="button" class="modal__close">
+            <img src="/assets/images/icons/cross-icon.svg" alt="close-icon" />
+          </button>
+  
+          <h3 class="modal__title"></h3>
+        </div>
+  
+        <div class="modal__body"></div>
+      </div>
+    </div>`
+
+   this.modal = createElement(html);
   }
 
   open(){
-    const html = `
-      <div class="modal">
-        <div class="modal__overlay"></div>
-        <div class="modal__inner">
-          <div class="modal__header">
-            <button type="button" class="modal__close">
-              <img src="/assets/images/icons/cross-icon.svg" alt="close-icon" />
-            </button>
-    
-            <h3 class="modal__title">
-              ${this.title}
-            </h3>
-          </div>
-    
-          <div class="modal__body">
-          </div>
-        </div>
-      </div>`
-
-    const modal = createElement(html);
-    const modalBody = modal.querySelector('.modal__body');
-
-    modalBody.appendChild(this.body);
     document.body.classList.add('is-modal-open');
-    document.body.appendChild(modal);
-    this.close(modal);
+    document.body.appendChild(this.modal);
+    this.close(this.modal);
   }
 
   close(modal){
