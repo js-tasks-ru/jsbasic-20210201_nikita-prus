@@ -3,6 +3,8 @@ import createElement from '../../assets/lib/create-element.js';
 export default class Modal {
   constructor() {
     this.modal = this.createModal();
+    this._keydownEventListener();
+    this._crossClickEventListener();
   }
 
   setTitle(title){
@@ -44,22 +46,26 @@ export default class Modal {
     document.body.appendChild(this.modal);
   }
 
-  close(){
-    const removeModal = () => {
-      document.body.removeAttribute('class');
-      this.modal.remove();
-    }
-
-    document.addEventListener('click', (event) => {
-      if(event.target.alt === 'close-icon'){
-        removeModal();
-      }
-    });
-
+  _keydownEventListener(){
     document.addEventListener('keydown', (event) => {
       if(event.code === 'Escape'){
-        removeModal();
+        event.preventDefault();
+        this.close()
       }
-    });
+    })
+  }
+
+  _crossClickEventListener(){
+    const closeBtn = this.modal.querySelector('.modal .modal__close');
+
+    closeBtn.addEventListener('click', () => {
+        this.close();
+    })
+  }
+
+  close(){
+    document.removeEventListener('keydown', this._keydownEventListener);
+    document.body.classList.remove('is-modal-open');
+    this.modal.remove();
   }
 }
